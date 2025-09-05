@@ -1,0 +1,85 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
+    id 'com.google.gms.google-services'
+}
+
+dependencies {
+  // Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:33.5.1')
+    // Add the dependency for the Firebase Authentication library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-auth")
+    
+  // TODO: Add the dependencies for Firebase products you want to use
+  // When using the BoM, don't specify versions in Firebase dependencies
+  // https://firebase.google.com/docs/android/setup#available-libraries
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.android.gms:play-services-maps:18.2.0'
+    implementation 'com.google.android.gms:play-services-location:21.1.0'
+    
+    // Removed Places SDK dependency as we're using Flutter-only implementation
+    
+    // Coroutines for async operations
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3'
+    
+    // Add multidex support
+    implementation 'androidx.multidex:multidex:2.0.1'
+    
+    // Add core desugaring - needed for Java 8 features in newer Android libraries
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+}
+
+android {
+    namespace 'com.example.sih_1'
+    compileSdkVersion 35 // Lowered from 35 since we don't need Places SDK anymore
+    ndkVersion flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        // Add to support Java 8 features needed by newer versions of the Places SDK
+        coreLibraryDesugaringEnabled true
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+    
+    defaultConfig {
+        applicationId "com.example.sih_1" // Replace with your app's package name
+        minSdkVersion 23 // Update this to 23
+        targetSdkVersion 33 // You can keep the targetSdkVersion the same or update to the latest one
+        versionCode 1
+        versionName "1.0"
+        
+        // Add multiDex support
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
+            // minifyEnabled false
+            // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}
+
+// check for latest version
+
+
+// dependencies {
+//     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+//     // Other dependencies
+// }
