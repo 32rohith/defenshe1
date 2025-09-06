@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:telephony/telephony.dart';
+import 'package:sms_advanced/sms_advanced.dart';
 import 'contact_provider.dart'; // Import your ContactProvider
 
 class TrackingProvider with ChangeNotifier {
   bool _isTrackingEnabled = false;
   bool get isTrackingEnabled => _isTrackingEnabled;
 
-  final Telephony telephony = Telephony.instance;
+  final SmsSender smsSender = SmsSender();
 
   void toggleTracking(BuildContext context) async {
     _isTrackingEnabled = !_isTrackingEnabled;
@@ -46,23 +46,13 @@ class TrackingProvider with ChangeNotifier {
   }
 
   Future<void> sendSms(List<String> recipients, String message) async {
-    final Telephony telephony = Telephony.instance;
-
-    // Check if permissions are granted
-    bool? permissionsGranted = await telephony.requestPhonePermissions;
-    if (permissionsGranted == true) {
-      try {
-        for (String recipient in recipients) {
-          await telephony.sendSms(
-            to: recipient,
-            message: message,
-          );
-        }
-      } catch (error) {
-        print("Error sending SMS: $error");
+    try {
+      for (final String recipient in recipients) {
+        final SmsMessage sms = SmsMessage(recipient, message);
+        smsSender.sendSms(sms);
       }
-    } else {
-      print("SMS permissions not granted.");
+    } catch (error) {
+      print("Error sending SMS: $error");
     }
   }
 }

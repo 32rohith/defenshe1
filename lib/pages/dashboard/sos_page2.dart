@@ -9,7 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sih_1/providers/contact_provider.dart';
-import 'package:telephony/telephony.dart';
+import 'package:sms_advanced/sms_advanced.dart';
 // import 'package:torch_light/torch_light.dart';
 // // import 'package:firebase_database/firebase_database.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
@@ -196,22 +196,14 @@ Future<void> saveSOSToFirestore(BuildContext context, Map<String, dynamic> locat
 }
 
   Future<void> sendSOSMessage(List<String> recipients, String message) async {
-    final Telephony telephony = Telephony.instance;
-
-    bool? permissionsGranted = await telephony.requestPhonePermissions;
-    if (permissionsGranted == true) {
-      try {
-        for (String recipient in recipients) {
-          await telephony.sendSms(
-            to: recipient,
-            message: message,
-          );
-        }
-      } catch (error) {
-        print("Error sending SMS: $error");
+    try {
+      final SmsSender smsSender = SmsSender();
+      for (final String recipient in recipients) {
+        final SmsMessage sms = SmsMessage(recipient, message);
+        smsSender.sendSms(sms);
       }
-    } else {
-      print("SMS permissions not granted.");
+    } catch (error) {
+      print("Error sending SMS: $error");
     }
   }
 

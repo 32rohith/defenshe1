@@ -45,12 +45,12 @@ dependencies:
   path_provider: ^2.1.4
   # flutter_phone: ^0.0.30
   permission_handler: ^11.3.1
-  direct_caller_sim_choice: ^1.0.5
   flutter_phone_direct_caller: ^2.1.1
+  sms_advanced: ^1.1.0
   geocoding: ^3.0.0
   fluttertoast: ^8.2.8
   # flutter_tts: ^4.0.2
-  telephony: ^0.2.0
+  # telephony: ^0.2.0
   location: ^6.0.2
   image_picker: ^1.1.2
   # speech_to_text: ^7.0.0
